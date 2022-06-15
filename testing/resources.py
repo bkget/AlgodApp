@@ -42,49 +42,33 @@ def getTemporaryAccount(client: AlgodClient) -> Account:
     global accountList
 
     if len(accountList) == 0:
-        # sks = [account.generate_account()[0] for i in range(16)]
-        from algosdk import mnemonic
-        first = mnemonic.to_private_key("spot dizzy hard sort only caution staff age route refuse move include boost initial load jewel father snap screen chalk rebuild urge bid above double")
-        second = mnemonic.to_private_key("limb story melody then hollow purchase brief kitchen tunnel pencil puppy sure hover jazz bargain ability economy father youth cigar language connect trap above hotel")
-
-        accountList = [Account(first), Account(second)] # [Account(sk) for sk in sks]
+        sks = [account.generate_account()[0] for i in range(16)]
+        accountList = [Account(sk) for sk in sks]
 
         genesisAccounts = getGenesisAccounts()
         suggestedParams = client.suggested_params()
 
         txns: List[transaction.Transaction] = []
-        # for i, a in enumerate(accountList):
-            # fundingAccount = genesisAccounts[i % len(genesisAccounts)]
-            # txns.append(
-            #     transaction.PaymentTxn(
-            #         sender= fundingAccount.getAddress(),
-            #         receiver= a.getAddress(),
-            #         amt=FUNDING_AMOUNT,
-            #         sp=suggestedParams,
-            #     )
-            # )
-        from algosdk import constants
+        for i, a in enumerate(accountList):
+            fundingAccount = genesisAccounts[i % len(genesisAccounts)]
+            txns.append(
+                transaction.PaymentTxn(
+                    sender=fundingAccount.getAddress(),
+                    receiver=a.getAddress(),
+                    amt=FUNDING_AMOUNT,
+                    sp=suggestedParams,
+                )
+            )
 
-        params = client.suggested_params()
-        # comment out the next two (2) lines to use suggested fees
-        params.flat_fee = constants.MIN_TXN_FEE 
-        params.fee = 1000
-        receiver = accountList[1].getAddress()
-        amount = 100000
-        note = "Hello World".encode()
+        txns = transaction.assign_group_id(txns)
+        signedTxns = [
+            txn.sign(genesisAccounts[i % len(genesisAccounts)].getPrivateKey())
+            for i, txn in enumerate(txns)
+        ]
 
-        unsigned_txn = transaction.PaymentTxn(accountList[0].getAddress(), params, receiver, amount, None, note)
+        client.send_transactions(signedTxns)
 
-        signed_txn = unsigned_txn.sign(accountList[0].getPrivateKey())
-        # txns = transaction.assign_group_id(txns)
-        # signedTxns = [
-        #     txn.sign(genesisAccounts[i % len(genesisAccounts)].getPrivateKey())
-        #     for i, txn in enumerate(txns)
-        # ]
-
-        var = client.send_transaction(signed_txn)
-        print()
-        # waitForTransaction(client, signedTxns[0].get_txid())
+        waitForTransaction(client, signedTxns[0].get_txid())
 
     return accountList.pop()
 
