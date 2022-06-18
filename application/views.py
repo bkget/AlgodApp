@@ -10,3 +10,11 @@ main_bp = Blueprint(
 )
 
 
+@main_bp.route('/')
+@login_required
+def index():
+    """Main page, displays balance"""
+    balance = current_user.get_balance()
+    return render_template('index.html', balance=balance)
+
+
