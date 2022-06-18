@@ -44,3 +44,9 @@ def get_transactions(address, substring):
     return txns
 
 
+def get_assets(address, name):
+    """Returns a list of assets that have been created by the given address"""
+
+    response = myindexer().search_assets(creator=address, name=name)
+    assets = response["assets"]
+    return assets
