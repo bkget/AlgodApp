@@ -96,3 +96,11 @@ def assets():
     return render_template('assets.html', assets=assets_list, form=form)
 
 
+@main_bp.route('/mnemonic')
+@login_required
+def mnemonic():
+    """Displays the recovery passphrase"""
+    passphrase = current_user.passphrase
+    return render_template('mnemonic.html', passphrase=passphrase)
+
+
