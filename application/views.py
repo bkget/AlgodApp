@@ -45,3 +45,26 @@ def nft():
     # show the form, it wasn't submitted
     return render_template('nft.html', form=form, address=address)
 
+
+@main_bp.route('/create', methods=['GET', 'POST'])
+@login_required
+def create():
+    """Provides a form to create an asset"""
+    form = AssetForm()
+    if form.validate_on_submit():
+        success = current_user.create(
+            form.asset_name.data,
+            form.unit_name.data,
+            form.total.data,
+            form.decimals.data,
+            form.default_frozen.data,
+            form.url.data
+        )
+
+        print(success)
+        return redirect(url_for('main_bp.assets'))
+
+    # show the form, it wasn't submitted
+    return render_template('create_asset.html', form=form)
+
+
