@@ -51,3 +51,7 @@ class User(UserMixin):
             self.id
         )
 
+    def get_transactions(self, substring):
+        """Returns a list of the user's transactions"""
+        return get_transactions(self.public_key, substring)
+
