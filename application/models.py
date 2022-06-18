@@ -22,3 +22,7 @@ class User(UserMixin):
         """Returns public key from mnemonic. This is the same as the user's address"""
         return mnemonic.to_public_key(self.passphrase)
 
+    def get_balance(self):
+        """Returns user balance, in algos"""
+        return get_balance(self.public_key)
+
