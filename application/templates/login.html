@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+<img src="../static/img/logo.jpg" width="70%" height="80%">
 <h1>Login</h1>
 <form action="{{ url_for('auth_bp.login') }}" method="post">
     {{ form.csrf_token }}
@@ -15,9 +16,9 @@
 {% if messages %}
 <h2>Passphrase not found</h2>
 {% else %}
-<br><br><br>
+<br>
 {% endif %}
 {% endwith %}
 <br>
-<h2><a href="{{ url_for('auth_bp.signup') }}">Create a Wallet</a></h2>
+<h3><a href="{{ url_for('auth_bp.signup') }}">Create a Wallet</a></h3>
 {% endblock %}
