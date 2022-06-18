@@ -68,3 +68,17 @@ def create():
     return render_template('create_asset.html', form=form)
 
 
+@main_bp.route('/transactions', methods=['GET', 'POST'])
+@login_required
+def transactions():
+    """Displays all transactions from the user"""
+    form = FilterForm()
+
+    if form.validate_on_submit():
+        txns = current_user.get_transactions(form.substring.data)
+    else:
+        txns = current_user.get_transactions("")
+
+    return render_template('transactions.html', txns=txns, form=form)
+
+
