@@ -82,3 +82,17 @@ def transactions():
     return render_template('transactions.html', txns=txns, form=form)
 
 
+@main_bp.route('/assets', methods=['GET', 'POST'])
+@login_required
+def assets():
+    """Displays all assets owned by the user"""
+    form = FilterForm()
+
+    if form.validate_on_submit():
+        assets_list = current_user.get_assets(form.substring.data)
+    else:
+        assets_list = current_user.get_assets("")
+
+    return render_template('assets.html', assets=assets_list, form=form)
+
+
