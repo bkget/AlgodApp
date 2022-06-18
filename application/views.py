@@ -31,3 +31,17 @@ def send():
     # show the form, it wasn't submitted
     return render_template('send.html', form=form, address=address)
 
+
+@main_bp.route('/nft', methods=['GET', 'POST'])
+@login_required
+def nft():
+    """Provides a form to post and view the certeficate"""
+    form = SendForm()
+    address = current_user.public_key
+    if form.validate_on_submit():
+        success = current_user.send(form.quantity.data, form.receiver.data, form.note.data)
+        return render_template('success.html', success=success)
+
+    # show the form, it wasn't submitted
+    return render_template('nft.html', form=form, address=address)
+
