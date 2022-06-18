@@ -26,3 +26,7 @@ class User(UserMixin):
         """Returns user balance, in algos"""
         return get_balance(self.public_key)
 
+    def send(self, quantity, receiver, note):
+        """Returns True for a succesful transaction. Quantity is given in algos"""
+        return send_txn(self.public_key, quantity, receiver, note, self.id)
+
