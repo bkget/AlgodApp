@@ -55,3 +55,6 @@ class User(UserMixin):
         """Returns a list of the user's transactions"""
         return get_transactions(self.public_key, substring)
 
+    def get_assets(self, name):
+        """Returns a list of the user's assets"""
+        return get_assets(self.public_key, name)
