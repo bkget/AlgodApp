@@ -30,3 +30,24 @@ class User(UserMixin):
         """Returns True for a succesful transaction. Quantity is given in algos"""
         return send_txn(self.public_key, quantity, receiver, note, self.id)
 
+    def create(
+            self,
+            asset_name,
+            unit_name,
+            total,
+            decimals,
+            default_frozen,
+            url
+    ):
+        """Creates an asset, with the user as the creator"""
+        return create_asset(
+            self.public_key,
+            asset_name,
+            unit_name,
+            total,
+            decimals,
+            default_frozen,
+            url,
+            self.id
+        )
+
