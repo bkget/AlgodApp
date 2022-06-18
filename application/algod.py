@@ -91,3 +91,50 @@ def wait_for_confirmation(transaction_id, timeout):
     raise Exception(
         'pending tx not found in timeout rounds, timeout value = : {}'.format(timeout))
 
+
+def create_asset(
+        creator,
+        asset_name,
+        unit_name,
+        total,
+        decimals,
+        default_frozen,
+        url,
+        sk
+):
+    """Creates an asset, returns the newly created asset ID"""
+    params = algod_client().suggested_params()
+
+    txn = AssetConfigTxn(
+        sender=creator,
+        sp=params,
+        total=total,
+        default_frozen=default_frozen,
+        unit_name=unit_name,
+        asset_name=asset_name,
+        manager=creator,
+        reserve=creator,
+        freeze=creator,
+        clawback=creator,
+        url=url,
+        decimals=decimals)
+
+    # Sign with secret key of creator
+    stxn = txn.sign(sk)
+
+    # Send the transaction to the network and retrieve the txid.
+    txid = algod_client().send_transaction(stxn)
+
+    try:
+        wait_for_confirmation(txid, 4)
+    except Exception as err:
+        print(err)
+        return None
+
+    try:
+        ptx = algod_client().pending_transaction_info(txid)
+        asset_id = ptx["asset-index"]
+        return asset_id
+    except Exception as err:
+        print(err)
+        return None
