@@ -2,7 +2,7 @@ atomicwrites==1.4.0
 attrs==21.4.0
 cffi==1.15.0
 click==8.0.4
-colorama==2.0.3
+colorama==0.4.5
 Flask==2.1.0
 Flask-Login==0.6.1
 flask-unittest==0.1.3
