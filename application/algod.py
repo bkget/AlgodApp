@@ -17,3 +17,10 @@ def algod_client():
     return algod.AlgodClient(algod_token, algod_address, headers)
 
 
+def create_account():
+    """Create account and return its mnemonic"""
+
+    private_key, address = account.generate_account()
+    return mnemonic.from_private_key(private_key)
+
+
