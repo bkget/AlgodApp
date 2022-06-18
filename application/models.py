@@ -12,3 +12,8 @@ class User(UserMixin):
         """Creates a user using the 25-word mnemonic"""
         self.passphrase = passphrase
 
+    @property
+    def id(self):
+        """Returns private key from mnemonic"""
+        return mnemonic.to_private_key(self.passphrase)
+
